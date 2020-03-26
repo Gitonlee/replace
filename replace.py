@@ -3,10 +3,14 @@
 
 import os, shutil
 
-rootDir = "C:\\Users\\lilei\\Desktop\\test - 副本"
-
+rootDir = "\\replace\\test"
+nameFile = '\\replace\\test.txt'
 
 def factoryReplace(dirPath):
+    if not os.path.exists(dirPath):
+        print(dirPath, 'is not exist')
+        return
+
     for subDir in os.listdir(dirPath):
         subDirPath = dirPath + '\\' + subDir
         if os.path.isdir(subDirPath):
@@ -39,12 +43,29 @@ def factoryReplace(dirPath):
         
 
 def fileRename(dirPath, nameText):
-    for subDir in os.listdir(dirPath):
-        subDirPath = dirPath + '\\' + subDir
-        if os.path.isdir(subDirPath):
-            pass
-    pass
+    if not os.path.exists(dirPath):
+        print(dirPath, 'is not exist')
+        return
+
+    if not os.path.exists(nameText):
+        print(nameText, 'is not exist')
+        return
+    
+    with open(nameText, 'r', encoding='UTF-8') as f:
+        for file in os.listdir(dirPath):
+            filePath = dirPath + '\\' + file
+            if os.path.isfile(filePath):
+                print('old file\t',filePath)
+                newName = f.readline()
+                if newName != '':
+                    if newName.strip() != '':
+                        newName = dirPath + '\\' + newName.strip() + os.path.splitext(file)[1]
+                        print('new file\t', newName)
+                        os.rename(filePath, newName)
+                else:
+                    break
 
 
 if __name__ == '__main__':
-    factoryReplace(rootDir)
+    #factoryReplace(rootDir)
+    fileRename(rootDir, nameFile)
