@@ -3,8 +3,8 @@
 
 import os, shutil
 
-rootDir = "\\replace\\test"
-nameFile = '\\replace\\test.txt'
+rootDir = ".\\test"
+nameFile = '.\\test.txt'
 
 def factoryReplace(dirPath):
     if not os.path.exists(dirPath):
@@ -52,6 +52,7 @@ def fileRename(dirPath, nameText):
         return
     
     with open(nameText, 'r', encoding='UTF-8') as f:
+        index = 1
         for file in os.listdir(dirPath):
             filePath = dirPath + '\\' + file
             if os.path.isfile(filePath):
@@ -59,13 +60,28 @@ def fileRename(dirPath, nameText):
                 newName = f.readline()
                 if newName != '':
                     if newName.strip() != '':
-                        newName = dirPath + '\\' + newName.strip() + os.path.splitext(file)[1]
+                        newName = dirPath + '\\' + getIndexText(index,2) + newName.strip() + os.path.splitext(file)[1]
+                        index += 1
                         print('new file\t', newName)
                         os.rename(filePath, newName)
                 else:
                     break
 
+def getIndexText(index, bits=0, prefix='', suffix=''):
+    """Generate chapter index.
+
+    index:the current index
+    bits:the figures of index
+    """
+    #the escape charactor of '{' is '{{'
+    formatStr = "{{}}{{:0>{}d}}{{}}".format(bits)
+    title = formatStr.format(prefix, index, suffix)
+    return title
+    
+
 
 if __name__ == '__main__':
-    #factoryReplace(rootDir)
+    factoryReplace(rootDir)
     fileRename(rootDir, nameFile)
+    
+
